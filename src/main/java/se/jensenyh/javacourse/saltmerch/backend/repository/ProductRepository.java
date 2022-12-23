@@ -15,8 +15,13 @@ import se.jensenyh.javacourse.saltmerch.backend.model.ColorVariant;
 import se.jensenyh.javacourse.saltmerch.backend.model.Product;
 import se.jensenyh.javacourse.saltmerch.backend.model.SizeContainer;
 
+
+@Repository
 public class ProductRepository
 {
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
     // NOTE: LEAVE THIS RECORD AS IT IS!
     private record VariantWImages(int id, String colorName, String imagesCsv) {}
     
@@ -34,7 +39,7 @@ public class ProductRepository
     public List<Product> selectAll(String category)
     {
         // todo: write an SQL query that only selects all rows from the products table
-        String sql = "";// <<<< todo: WRITE SQL QUERY HERE
+        String sql = "SELECT * FROM products";// <<<< todo: WRITE SQL QUERY HERE
         
         
         
@@ -46,7 +51,13 @@ public class ProductRepository
         // todo: create a RowMapper for the Product class,
         //  using the constructor that takes id, category, title, description, and previewImage
         // NOTE: have in mind that the column name that corresponds to previewImage is preview_image
-        RowMapper<Product> rm = null;// <<<< todo: CREATE RowMapper HERE
+        RowMapper<Product> rm = ((rs, rowNum) -> new Product(
+                rs.getInt("id"),
+                rs.getString("category"),
+                rs.getString("title"),
+                rs.getString("description"),
+                rs.getString("preview_image")
+        ));// <<<< todo: CREATE RowMapper HERE
         
         
         
@@ -154,11 +165,13 @@ public class ProductRepository
     {
         // todo: write the SQL query for deleting a single product
         var sql = """
+                DELETE FROM products
+                WHERE id = ?
                 """;// <<<< todo: WRITE SQL QUERY HERE
         
         
         // todo: execute the query while also passing the id as a parameter
-        return -1000;// <<<< todo: call jdbcTemplate method here
+        return jdbcTemplate.update(sql, id);// <<<< todo: call jdbcTemplate method here
     }
     
     // NOTE: NO NEED TO MODIFY THIS METHOD!
