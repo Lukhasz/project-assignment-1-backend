@@ -11,7 +11,7 @@ import se.jensenyh.javacourse.saltmerch.backend.repository.CartRepository;
 
 import java.util.Objects;
 
-@CrossOrigin (origins = "http://localhost:3010")
+@CrossOrigin //(origins = "http://localhost:3010")
 @RestController
 @RequestMapping("/carts")
 public class CartController {
@@ -26,24 +26,50 @@ public class CartController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
+    //TODO: Figure out how to utilize PathVariable id
     @PatchMapping("/{id}")
     public ResponseEntity<CartItem> addOrRemoveItemFromCart(@PathVariable("id") int id,
-                                                  @RequestBody CartItem cartItem,
-                                                  @RequestParam String action) {
+                                                            @RequestBody CartItem cartItem,
+                                                            @RequestParam String action) {
 
         if (Objects.equals(action, "add")) {
             cartRepository.insertOrIncrementItem(cartItem);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
+
         if (Objects.equals(action, "remove")) {
             cartRepository.deleteOrDecrementItem(cartItem);
-            return new ResponseEntity(HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
+            return new ResponseEntity<>(HttpStatus.OK);
 
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
+
+    //TODO: Figure out how to utilize PathVariable id
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CartItem> clearCartContentsOrRestock(@PathVariable("id") int id,
+                                                               @RequestParam String buyout) {
+        if (Objects.equals(buyout, "true")) {
+            cartRepository.deleteAllItems(false);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+//        else {
+//            cartRepository.deleteAllItems(true);
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        }
+
+
+        //TODO: fix "Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'buyout' for method parameter type String is not present]"
+        if (Objects.equals(buyout, "false")) {
+            cartRepository.deleteAllItems(true);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+          return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }
