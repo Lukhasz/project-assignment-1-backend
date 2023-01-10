@@ -1,6 +1,7 @@
 package se.jensenyh.javacourse.saltmerch.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class Product implements Serializable
     //  3. constructor with id, category, title, description, colorVariants
 
 
-    public Product() {
+    public Product(Product prod, HttpStatus created) {
         colorVariants = new ArrayList<>();
     }
 

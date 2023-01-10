@@ -1,6 +1,7 @@
 package se.jensenyh.javacourse.saltmerch.backend.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -36,6 +37,10 @@ public class ProductRepository
     
     // todo: this method needs you to write its SQL query
     /** Reads all rows from the products table and returns them as a List of Products. */
+
+
+
+    //DONE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public List<Product> selectAll(String category)
     {
         // todo: write an SQL query that only selects all rows from the products table
@@ -91,7 +96,7 @@ public class ProductRepository
         Product newProd = null;
         if (pid > -1)
         {
-            newProd = new Product();
+            newProd = new Product(prod, HttpStatus.CREATED);
             newProd.id = pid;
             newProd.category = category;
             newProd.title = prod.title;
@@ -161,6 +166,9 @@ public class ProductRepository
     // todo: this method needs you to write its SQL query and execute it
     // NOTE: optional
     /** Deletes a specific row from the products table. */
+
+
+    //DONE, MAYBE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public int deleteProduct(int id)
     {
         // todo: write the SQL query for deleting a single product
@@ -210,7 +218,7 @@ public class ProductRepository
     
     // NOTE: NO NEED TO MODIFY THIS METHOD!
     /** Utility method used in getEntireProduct().
-     *      Reads rows from variants and images tables. */
+     * Reads rows from variants and images tables. */
     public List<VariantWImages> getVariantsAndImages(int productId)
     {
         var sql = """
@@ -288,11 +296,14 @@ public class ProductRepository
     {
         // todo: write the SQL query for deleting a variant
         //  with specific product_id and color_name
-        var sql = "";// <<<< todo: WRITE SQL QUERY HERE
+        var sql = """
+                DELETE FROM variants
+                WHERE productId = ?
+                AND color_name = ?""";// <<<< todo: WRITE SQL QUERY HERE
     
     
         // todo: execute the query while also passing the id as a parameter
-        return -1000;// <<<< todo: call jdbcTemplate method here
+        return jdbcTemplate.update(sql, productId, color);// <<<< todo: call jdbcTemplate method here
     }
     
     // NOTE: the endpoint that's supposed to use this method is OPTIONAL!
