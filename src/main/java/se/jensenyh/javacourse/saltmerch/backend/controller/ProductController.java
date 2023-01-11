@@ -58,18 +58,18 @@ public class ProductController
     }
 
 
-    @PostMapping("/hats")
-    public ResponseEntity<Product> addHat(@RequestBody Product prod, @RequestBody String category) {
-        productRepository.insertProductAndProps(prod, category);
-        return new ResponseEntity<>(prod, HttpStatus.CREATED);
-    }
-
-
 //    @PostMapping("/hats")
-//    public Product addHat(@RequestBody Product prod, @RequestBody String category) {
+//    public ResponseEntity<Product> addHat(@RequestBody Product prod, @RequestBody String category) {
 //        productRepository.insertProductAndProps(prod, category);
-//        return new Product(prod, HttpStatus.CREATED);
+//        return new ResponseEntity<>(prod, HttpStatus.CREATED);
 //    }
+
+
+    @PostMapping("/hats")
+    public Product addHat(@RequestBody Product prod, @RequestBody String category) {
+        productRepository.insertProductAndProps(prod, category);
+        return new Product(prod, HttpStatus.CREATED);
+    }
 
 //    @PostMapping("/hats")
 //    public ResponseEntity addHat(@RequestBody Product id, @RequestBody String body) {

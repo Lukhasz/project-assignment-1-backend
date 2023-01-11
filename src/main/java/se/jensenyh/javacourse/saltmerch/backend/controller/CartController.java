@@ -1,6 +1,7 @@
 package se.jensenyh.javacourse.saltmerch.backend.controller;
 
 
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,25 +52,15 @@ public class CartController {
     //TODO: Figure out how to utilize PathVariable id
     @DeleteMapping("/{id}")
     public ResponseEntity<CartItem> clearCartContentsOrRestock(@PathVariable("id") int id,
-                                                               @RequestParam String buyout) {
+                                                               @RequestParam @Nullable String buyout) {
+
         if (Objects.equals(buyout, "true")) {
             cartRepository.deleteAllItems(false);
             return new ResponseEntity<>(HttpStatus.OK);
-        }
 
-//        else {
-//            cartRepository.deleteAllItems(true);
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        }
-
-
-        //TODO: fix "Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'buyout' for method parameter type String is not present]"
-        if (Objects.equals(buyout, "false")) {
+        } else {
             cartRepository.deleteAllItems(true);
             return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-          return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
 }
