@@ -38,7 +38,7 @@ public class Product implements Serializable
     //  3. constructor with id, category, title, description, colorVariants
 
 
-    public Product(Product prod, HttpStatus created) {
+    public Product() {
         colorVariants = new ArrayList<>();
     }
 

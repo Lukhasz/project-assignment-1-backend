@@ -68,7 +68,7 @@ public class ProductController
     @PostMapping("/hats")
     public Product addHat(@RequestBody Product prod, @RequestBody String category) {
         productRepository.insertProductAndProps(prod, category);
-        return new Product(prod, HttpStatus.CREATED);
+        return new Product();
     }
 
 //    @PostMapping("/hats")

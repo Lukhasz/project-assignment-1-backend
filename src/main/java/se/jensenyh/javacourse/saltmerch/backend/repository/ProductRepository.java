@@ -96,7 +96,7 @@ public class ProductRepository
         Product newProd = null;
         if (pid > -1)
         {
-            newProd = new Product(prod, HttpStatus.CREATED);
+            newProd = new Product();
             newProd.id = pid;
             newProd.category = category;
             newProd.title = prod.title;
