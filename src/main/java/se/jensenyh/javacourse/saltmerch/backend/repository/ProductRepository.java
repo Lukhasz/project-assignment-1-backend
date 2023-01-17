@@ -298,7 +298,7 @@ public class ProductRepository
         //  with specific product_id and color_name
         var sql = """
                 DELETE FROM variants
-                WHERE productId = ?
+                WHERE product_id = ?
                 AND color_name = ?""";// <<<< todo: WRITE SQL QUERY HERE
     
     
