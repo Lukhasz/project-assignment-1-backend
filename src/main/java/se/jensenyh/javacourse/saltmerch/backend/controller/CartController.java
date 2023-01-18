@@ -12,7 +12,7 @@ import se.jensenyh.javacourse.saltmerch.backend.repository.CartRepository;
 
 import java.util.Objects;
 
-@CrossOrigin //(origins = "http://localhost:3010")
+@CrossOrigin (origins = "http://localhost:3010")
 @RestController
 @RequestMapping("/carts")
 public class CartController {
@@ -22,7 +22,13 @@ public class CartController {
     CartRepository cartRepository;
 
     @GetMapping("")
-    public ResponseEntity<CartRepository> getCart() {
+    public ResponseEntity<CartItem> getCart() {
+        cartRepository.selectAllItems();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CartItem> getCartId() {
         cartRepository.selectAllItems();
         return new ResponseEntity<>(HttpStatus.OK);
     }
