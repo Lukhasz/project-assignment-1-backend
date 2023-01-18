@@ -28,31 +28,57 @@ public class ProductController
         return productRepository.selectAll();
     }
 
-    @GetMapping("/hats")
-    public List<Product> getAllHats() {
-        return productRepository.selectAllOfCategory("hats");
-    }
 
-    @GetMapping("/jackets")
-    public List<Product> getAllJackets() {
-        return productRepository.selectAllOfCategory("jackets");
-    }
-
-    @GetMapping("/tshirts")
-    public List<Product> getAllTShirts() {
-        return productRepository.selectAllOfCategory("tshirts");
-    }
-
-    @GetMapping("/bags")
-    public List<Product> getAllBags() {
-        return productRepository.selectAllOfCategory("bags");
-    }
+//    @GetMapping("/{category}")
+//    public List<Product> getAllFromSpecificCategory(@PathVariable("category") String category) {
+//        return productRepository.selectAllOfCategory(category);
+//    }
 
 
-    @GetMapping("/{id}")
-    public Product getProduct(@PathVariable("id") int id) {
-        return productRepository.getEntireProduct(id);
+    @GetMapping("{variable}")
+    public Object getAllFromSpecificCategoryOrID(@PathVariable("variable") String var) {
+        switch (var) {
+            case "hats":
+                return productRepository.selectAllOfCategory(var);
+            case "jackets":
+                return productRepository.selectAllOfCategory(var);
+            case "tshirts":
+                return productRepository.selectAllOfCategory(var);
+            case "bags":
+                return productRepository.selectAllOfCategory(var);
+            default:
+                int number = Integer.parseInt(var);
+                return productRepository.getEntireProduct(number);
+        }
     }
+
+
+
+//    @GetMapping("/hats")
+//    public List<Product> getAllHats() {
+//        return productRepository.selectAllOfCategory("hats");
+//    }
+//
+//    @GetMapping("/jackets")
+//    public List<Product> getAllJackets() {
+//        return productRepository.selectAllOfCategory("jackets");
+//    }
+//
+//    @GetMapping("/tshirts")
+//    public List<Product> getAllTShirts() {
+//        return productRepository.selectAllOfCategory("tshirts");
+//    }
+//
+//    @GetMapping("/bags")
+//    public List<Product> getAllBags() {
+//        return productRepository.selectAllOfCategory("bags");
+//    }
+//
+//
+//    @GetMapping("/{id}")
+//    public Product getProduct(@PathVariable("id") int id) {
+//        return productRepository.getEntireProduct(id);
+//    }
 
 
     @PostMapping("/hats")
