@@ -1,12 +1,14 @@
 package se.jensenyh.javacourse.saltmerch.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import se.jensenyh.javacourse.saltmerch.backend.model.CartItem;
 import se.jensenyh.javacourse.saltmerch.backend.repository.CartRepository;
 
 import java.util.List;
 import java.util.Objects;
 
+@Service
 public class CartService {
 
     @Autowired
@@ -16,14 +18,21 @@ public class CartService {
         return cartRepository.selectAllItems();
     }
 
-    public int addOrRemoveItemFromCart(String execute, CartItem cartItem) {
-        if (Objects.equals(execute, "add")) {
+    public int addOrRemoveItemFromCart(String action, CartItem cartItem) {
+        if (Objects.equals(action, "add")) {
             return cartRepository.insertOrIncrementItem(cartItem);
         }
-        if (Objects.equals(execute, "remove")) {
+        if (Objects.equals(action, "remove")) {
             return cartRepository.deleteOrDecrementItem(cartItem);
         }
+        if (action == null) {
+            return -2;
+        }
         else return -1;
+    }
+
+    public void emptyCart(boolean buyout) {
+        cartRepository.deleteAllItems(!buyout);
     }
 
 }

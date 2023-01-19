@@ -1,22 +1,24 @@
 package se.jensenyh.javacourse.saltmerch.backend.controller;
 
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.jensenyh.javacourse.saltmerch.backend.model.ColorVariant;
 import se.jensenyh.javacourse.saltmerch.backend.model.Product;
 import se.jensenyh.javacourse.saltmerch.backend.repository.ProductRepository;
+import se.jensenyh.javacourse.saltmerch.backend.service.ProductService;
 
-import java.awt.*;
 import java.util.List;
+
 @CrossOrigin (origins = "http://localhost:3010")
 @RestController
 @RequestMapping("/products")
 public class ProductController
 {
+
+    @Autowired
+    ProductService productService;
 
     @Autowired
     ProductRepository productRepository;
@@ -25,30 +27,19 @@ public class ProductController
 
     @GetMapping("")
     public List<Product> getAllProducts() {
-        return productRepository.selectAll();
+        return productService.getAllProducts();
     }
 
 
-//    @GetMapping("/{category}")
-//    public List<Product> getAllFromSpecificCategory(@PathVariable("category") String category) {
-//        return productRepository.selectAllOfCategory(category);
-//    }
+    @GetMapping("/{variable}")
+    public Object getAllFromSpecificCategoryOrID(@PathVariable("variable") String str) {
 
-
-    @GetMapping("{variable}")
-    public Object getAllFromSpecificCategoryOrID(@PathVariable("variable") String var) {
-        switch (var) {
-            case "hats":
-                return productRepository.selectAllOfCategory(var);
-            case "jackets":
-                return productRepository.selectAllOfCategory(var);
-            case "tshirts":
-                return productRepository.selectAllOfCategory(var);
-            case "bags":
-                return productRepository.selectAllOfCategory(var);
+        switch (str) {
+            case "hats", "jackets", "tshirts", "bags":
+                return productService.getAllFromSpecificCategory(str);
             default:
-                int number = Integer.parseInt(var);
-                return productRepository.getEntireProduct(number);
+                int number = Integer.parseInt(str);
+                return productService.getSpecificProduct(number);
         }
     }
 
@@ -80,45 +71,60 @@ public class ProductController
 //        return productRepository.getEntireProduct(id);
 //    }
 
+    @PostMapping("/{variable}")
+    public ResponseEntity<Product> addProduct(@PathVariable("variable") String str,
+                                              @RequestBody Product prod) {
 
-    @PostMapping("/hats")
-    public ResponseEntity<Product> addHat(@RequestBody Product prod) {
-        String category = "hats";
-        productRepository.insertProductAndProps(prod, category);
-        return new ResponseEntity<>(prod, HttpStatus.CREATED);
+        switch (str) {
+            case "hats", "bags", "jackets", "tshirts":
+                productRepository.insertProductAndProps(prod, str);
+                return new ResponseEntity<>(prod, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/jackets")
-    public ResponseEntity<Product> addJacket(@RequestBody Product prod) {
-        String category = "jackets";
-        productRepository.insertProductAndProps(prod, category);
-        return new ResponseEntity<>(prod, HttpStatus.CREATED);
-    }
 
-    @PostMapping("/tshirts")
-    public ResponseEntity<Product> addTShirt(@RequestBody Product prod) {
-        String category = "tshirts";
-        productRepository.insertProductAndProps(prod, category);
-        return new ResponseEntity<>(prod, HttpStatus.CREATED);
-    }
 
-    @PostMapping("/bags")
-    public ResponseEntity<Product> addBag(@RequestBody Product prod) {
-        String category = "bags";
-        productRepository.insertProductAndProps(prod, category);
-        return new ResponseEntity<>(prod, HttpStatus.CREATED);
-    }
+//    @PostMapping("/hats")
+//    public ResponseEntity<Product> addHat(@RequestBody Product prod) {
+//        String category = "hats";
+//        productRepository.insertProductAndProps(prod, category);
+//        return new ResponseEntity<>(prod, HttpStatus.CREATED);
+//    }
+//
+//    @PostMapping("/jackets")
+//    public ResponseEntity<Product> addJacket(@RequestBody Product prod) {
+//        String category = "jackets";
+//        productRepository.insertProductAndProps(prod, category);
+//        return new ResponseEntity<>(prod, HttpStatus.CREATED);
+//    }
+//
+//    @PostMapping("/tshirts")
+//    public ResponseEntity<Product> addTShirt(@RequestBody Product prod) {
+//        String category = "tshirts";
+//        productRepository.insertProductAndProps(prod, category);
+//        return new ResponseEntity<>(prod, HttpStatus.CREATED);
+//    }
+//
+//    @PostMapping("/bags")
+//    public ResponseEntity<Product> addBag(@RequestBody Product prod) {
+//        String category = "bags";
+//        productRepository.insertProductAndProps(prod, category);
+//        return new ResponseEntity<>(prod, HttpStatus.CREATED);
+//    }
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProductMetadata(@PathVariable("id") int id, @RequestBody Product body) {
+    public ResponseEntity<Product> updateProductMetadata(@PathVariable("id") int id,
+                                                         @RequestBody Product body) {
         productRepository.updateProductMeta(id, body);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
     @PostMapping("/{id}/variants")
-    public ResponseEntity<Product> createVariantForSpecificProduct(@PathVariable("id") int id, @RequestBody ColorVariant body) {
+    public ResponseEntity<Product> createVariantForSpecificProduct(@PathVariable("id") int id,
+                                                                   @RequestBody ColorVariant body) {
         productRepository.addVariant(id, body);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -126,7 +132,7 @@ public class ProductController
 
     @PutMapping("/{id}/variants/stock")
     public ResponseEntity<Product> restockSpecificSizeOfVariant(@PathVariable("id") int id,
-                                                       @RequestParam String size,
+                                                                @RequestParam String size,
                                                        String color,
                                                        int quantity) {
         productRepository.restockSize(id, size, color, quantity);
@@ -142,7 +148,8 @@ public class ProductController
 
 
     @DeleteMapping("/{productId}/variants/{variantId}")
-    public ResponseEntity<Product> deleteVariant(@PathVariable("productId") int pid, @PathVariable ("variantId") String vid) {
+    public ResponseEntity<Product> deleteVariant(@PathVariable("productId") int pid,
+                                                 @PathVariable ("variantId") String vid) {
         productRepository.deleteVariant(pid, vid);
         return new ResponseEntity<>(HttpStatus.OK);
     }

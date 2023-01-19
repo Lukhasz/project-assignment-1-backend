@@ -7,10 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.jensenyh.javacourse.saltmerch.backend.model.CartItem;
-import se.jensenyh.javacourse.saltmerch.backend.model.Product;
-import se.jensenyh.javacourse.saltmerch.backend.repository.CartRepository;
-
-import java.util.Objects;
+import se.jensenyh.javacourse.saltmerch.backend.service.CartService;
 
 @CrossOrigin (origins = "http://localhost:3010")
 @RestController
@@ -19,17 +16,18 @@ public class CartController {
 
 
     @Autowired
-    CartRepository cartRepository;
+    CartService cartService;
 
-    @GetMapping("")
-    public ResponseEntity<CartItem> getCart() {
-        cartRepository.selectAllItems();
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+
+//    @GetMapping("")
+//    public ResponseEntity<CartItem> getCart() {
+//        cartRepository.selectAllItems();
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<CartItem> getCartId() {
-        cartRepository.selectAllItems();
+        cartService.getCart();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -37,36 +35,52 @@ public class CartController {
     //TODO: Figure out how to utilize PathVariable id
     @PatchMapping("/{id}")
     public ResponseEntity<CartItem> addOrRemoveItemFromCart(@PathVariable("id") int id,
-                                                            @RequestBody CartItem cartItem,
-                                                            @RequestParam String action) {
+                                                            @RequestParam String action,
+                                                            @RequestBody CartItem cartItem) {
 
-        if (Objects.equals(action, "add")) {
-            cartRepository.insertOrIncrementItem(cartItem);
-            return new ResponseEntity<>(HttpStatus.OK);
+        if (id == 1) {
+            int fromCartService = cartService.addOrRemoveItemFromCart(action, cartItem);
+
+            switch (fromCartService) {
+                case 1:
+                    return new ResponseEntity<>(HttpStatus.OK);
+                case -1:
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                case -2:
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
         }
-
-        if (Objects.equals(action, "remove")) {
-            cartRepository.deleteOrDecrementItem(cartItem);
-            return new ResponseEntity<>(HttpStatus.OK);
-
-        } else {
+//        if (Objects.equals(action, "add")) {
+//            cartRepository.insertOrIncrementItem(cartItem);
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        }
+//
+//        if (Objects.equals(action, "remove")) {
+//            cartRepository.deleteOrDecrementItem(cartItem);
+//            return new ResponseEntity<>(HttpStatus.OK);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
     }
 
 
     //TODO: Figure out how to utilize PathVariable id
     @DeleteMapping("/{id}")
     public ResponseEntity<CartItem> clearCartContentsOrRestock(@PathVariable("id") int id,
-                                                               @RequestParam @Nullable String buyout) {
+                                                               @RequestParam @Nullable boolean buyout) {
 
-        if (Objects.equals(buyout, "true")) {
-            cartRepository.deleteAllItems(false);
-            return new ResponseEntity<>(HttpStatus.OK);
-
-        } else {
-            cartRepository.deleteAllItems(true);
+        if (id == 1) {
+            cartService.emptyCart(buyout);
             return new ResponseEntity<>(HttpStatus.OK);
         }
+        else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+
+//        if (Objects.equals(buyout, "true")) {
+//            cartRepository.deleteAllItems(false);
+//            return new ResponseEntity<>(HttpStatus.OK);
+//
+//        } else {
+//            cartRepository.deleteAllItems(true);
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        }
     }
 }
