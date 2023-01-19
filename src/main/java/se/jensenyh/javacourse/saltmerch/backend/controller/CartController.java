@@ -14,16 +14,9 @@ import se.jensenyh.javacourse.saltmerch.backend.service.CartService;
 @RequestMapping("/carts")
 public class CartController {
 
-
     @Autowired
     CartService cartService;
 
-
-//    @GetMapping("")
-//    public ResponseEntity<CartItem> getCart() {
-//        cartRepository.selectAllItems();
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<CartItem> getCartId() {
@@ -32,12 +25,10 @@ public class CartController {
     }
 
 
-    //TODO: Figure out how to utilize PathVariable id
     @PatchMapping("/{id}")
     public ResponseEntity<CartItem> addOrRemoveItemFromCart(@PathVariable("id") int id,
                                                             @RequestParam String action,
                                                             @RequestBody CartItem cartItem) {
-
         if (id == 1) {
             int fromCartService = cartService.addOrRemoveItemFromCart(action, cartItem);
 
@@ -50,19 +41,11 @@ public class CartController {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
         }
-//        if (Objects.equals(action, "add")) {
-//            cartRepository.insertOrIncrementItem(cartItem);
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        }
-//
-//        if (Objects.equals(action, "remove")) {
-//            cartRepository.deleteOrDecrementItem(cartItem);
-//            return new ResponseEntity<>(HttpStatus.OK);
+
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 
-    //TODO: Figure out how to utilize PathVariable id
     @DeleteMapping("/{id}")
     public ResponseEntity<CartItem> clearCartContentsOrRestock(@PathVariable("id") int id,
                                                                @RequestParam @Nullable boolean buyout) {
@@ -72,15 +55,6 @@ public class CartController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-
-//        if (Objects.equals(buyout, "true")) {
-//            cartRepository.deleteAllItems(false);
-//            return new ResponseEntity<>(HttpStatus.OK);
-//
-//        } else {
-//            cartRepository.deleteAllItems(true);
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        }
     }
+
 }

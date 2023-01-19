@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import se.jensenyh.javacourse.saltmerch.backend.model.CartItem;
 import se.jensenyh.javacourse.saltmerch.backend.repository.CartRepository;
 
-import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -14,9 +13,11 @@ public class CartService {
     @Autowired
     CartRepository cartRepository;
 
-    public List<CartItem> getCart() {
-        return cartRepository.selectAllItems();
+
+    public void getCart() {
+        cartRepository.selectAllItems();
     }
+
 
     public int addOrRemoveItemFromCart(String action, CartItem cartItem) {
         if (Objects.equals(action, "add")) {
@@ -30,6 +31,7 @@ public class CartService {
         }
         else return -1;
     }
+
 
     public void emptyCart(boolean buyout) {
         cartRepository.deleteAllItems(!buyout);
