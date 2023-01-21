@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class ProductService {
 
-    
+
     @Autowired
     ProductRepository productRepository;
 
@@ -46,6 +46,10 @@ public class ProductService {
 
     public void deleteProduct(int id) {
         productRepository.deleteProduct(id);
+    }
+
+    public void deleteVariant(int pid, String color) {
+        productRepository.deleteVariant(pid, color);
     }
 
 }

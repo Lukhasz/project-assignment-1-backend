@@ -10,7 +10,7 @@ import se.jensenyh.javacourse.saltmerch.backend.service.ProductService;
 
 import java.util.List;
 
-@CrossOrigin (origins = "http://localhost:3010")
+@CrossOrigin(origins = "http://localhost:3010")
 @RestController
 @RequestMapping("/products")
 public class ProductController {
@@ -70,8 +70,8 @@ public class ProductController {
     @PutMapping("/{id}/variants/stock")
     public ResponseEntity<Product> restockSpecificSizeOfVariant(@PathVariable("id") int id,
                                                                 @RequestParam String size,
-                                                       String color,
-                                                       int quantity) {
+                                                                String color,
+                                                                int quantity) {
         productService.restockSpecificSizeOfVariant(id, size, color, quantity);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -84,11 +84,11 @@ public class ProductController {
     }
 
 
-//    @DeleteMapping("/{productId}/variants/{variantId}")
-//    public ResponseEntity<Product> deleteVariant(@PathVariable("productId") int pid,
-//                                                 @PathVariable ("variantId") String vid) {
-//        productRepository.deleteVariant(pid, vid);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+    @DeleteMapping("/{productId}/variants")
+    public ResponseEntity<Product> deleteVariant(@PathVariable("productId") int pid,
+                                                 @RequestParam String color) {
+        productService.deleteVariant(pid, color);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import se.jensenyh.javacourse.saltmerch.backend.model.CartItem;
 import se.jensenyh.javacourse.saltmerch.backend.service.CartService;
 
-@CrossOrigin (origins = "http://localhost:3010")
+@CrossOrigin(origins = "http://localhost:3010")
 @RestController
 @RequestMapping("/carts")
 public class CartController {
@@ -42,7 +42,7 @@ public class CartController {
             }
         }
 
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 
@@ -53,8 +53,7 @@ public class CartController {
         if (id == 1) {
             cartService.emptyCart(buyout);
             return new ResponseEntity<>(HttpStatus.OK);
-        }
-        else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 }

@@ -31,8 +31,7 @@ public class ColorVariant {
     }
 
 
-    public void setImagesFromCSV(String csv) throws Exception
-    {
+    public void setImagesFromCSV(String csv) throws Exception {
         images = new ArrayList<>(Arrays.asList(csv.split(",")));
     }
 
