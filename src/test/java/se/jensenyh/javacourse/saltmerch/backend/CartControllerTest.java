@@ -25,6 +25,7 @@ public class CartControllerTest {
     private CartService cartService;
 
 
+    //Makes sure that PATCH /api/vi/carts/{id} returns a 200 response when using "add" as a RequestParam
     @Test
     public void addOrRemoveItemFromCart_ShouldReturnHttpStatusOk() {
 
@@ -38,6 +39,7 @@ public class CartControllerTest {
         assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
+    //Makes sure that PATCH /api/v1/carts/{id} returns a 400 response when using an invalid string as RequestParam
     @Test
     public void addOrRemoveItemFromCart_ShouldReturnHttpStatusBadRequest() {
 
@@ -51,6 +53,7 @@ public class CartControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
     }
 
+    //Makes sure that DELETE /api/v1/carts/{id} returns a 200 response when passing an id of 1 and buyout = true
     @Test
     public void clearCartContentsOrRestock_ShouldReturnHttpStatusOk() {
 
@@ -63,6 +66,7 @@ public class CartControllerTest {
         assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
+    //Makes sure that DELETE /api/v1/carts/{id} returns a 400 response when passing an invalid id and buyout = true
     @Test
     public void clearCartContentsOrRestock_ShouldReturnHttpStatusBadRequest() {
 

@@ -8,6 +8,8 @@ import se.jensenyh.javacourse.saltmerch.backend.repository.ProductRepository;
 
 import java.util.List;
 
+
+//Used a Service Class for separation between Repository and Controller
 @Service
 public class ProductService {
 

@@ -24,7 +24,7 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
-
+    //Opted for a switch for GetMapping({hats, jackets, tshirts, bags, id}) instead of separate endpoints
     @GetMapping("/{variable}")
     public Object getAllFromSpecificCategoryOrID(@PathVariable("variable") String str) {
 
@@ -37,13 +37,13 @@ public class ProductController {
         }
     }
 
-
+    //Opted for a switch for PostMapping({hats, jackets, tshirts, bags}) instead of separate endpoints
     @PostMapping("/{variable}")
     public ResponseEntity<Product> addProduct(@PathVariable("variable") String str,
                                               @RequestBody Product prod) {
 
         switch (str) {
-            case "hats", "bags", "jackets", "tshirts":
+            case "hats", "jackets", "tshirts", "bags":
                 productService.addProduct(prod, str);
                 return new ResponseEntity<>(prod, HttpStatus.CREATED);
         }

@@ -7,6 +7,8 @@ import se.jensenyh.javacourse.saltmerch.backend.repository.CartRepository;
 
 import java.util.Objects;
 
+
+//Used a Service Class for separation between Repository and Controller
 @Service
 public class CartService {
 
